@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Libreria</title>
+<style type="text/css">
+body{text-align:center;}
+.cajas{float:left;height:60%;width:30%;}
+#caja1{margin-left:5%;}
+</style>
+<script type="text/javascript">
+	
+	function recuperaLibro(){
+		 var ISBN = 'ISBN=' + document.getElementById("recone").value;
+		 var xmlhttp;  // objeto XMLHttpRequest
+	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+	            xmlhttp = new XMLHttpRequest();
+	        } else {  // para IE6, IE5
+	            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	        }
+	        xmlhttp.onreadystatechange = function() {
+	        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	            var respuesta = xmlhttp.responseText;
+	            respuesta=respuesta.trim();
+	            if (respuesta=='') {  // no se encontró el usuario
+	            document.getElementById("usuarioInexistente").style.visibility = 'visible';
+	            } else {
+	            document.getElementById("usuarioInexistente").style.visibility = 'hidden';
+	            }
+	            document.getElementById("clave").value = respuesta;
+	            document.getElementById("usuario").focus();
+	        }
+		    }
+		    xmlhttp.open("GET","CompruebaUsuario?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+		    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+		    xmlhttp.send();  // lanza la solicitud
+		    }
+		 
+		 
+	}
+	function recuperaAllLibro(){
+		
+	}
+	function eliminaLibro(){
+	
+	}
+
+</script>
+</head>
+<body>
+	</br></br><h1>LIBRERIA</h1></br></br></br></br>
+	<form>
+		<div class="cajas" id="caja1">
+ 		Recuperar un libro por ISBN</br><input type="text" name="recone" id="recone"/></br>
+ 		<input type="button" id="enviar" value="Recuperar libro" onclick="recuperaLibro();"/>
+ 		</div>
+ 		<div class="cajas">
+ 		Recuperar todos los libros</br>
+ 		<input type="button" id="enviar" value="Recuperar libros" onclick="recuperaAllLibro();"/>
+ 		</div>
+ 		<div class="cajas">
+ 		Eliminar un libro por ISBN</br><input type="text" name="elim" id="elim"/></br>
+ 		<input type="button" id="enviar" value="Elimina libro" onclick="eliminaLibro();"/>
+ 		</div>
+ 	</form>
+</body>
+</html>
