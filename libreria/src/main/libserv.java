@@ -1,7 +1,11 @@
 package main;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import javax.servlet.ServletException;
@@ -14,51 +18,47 @@ import javax.servlet.http.HttpServletResponse;
 public class libserv extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    
+	ArrayList<Libro> libreria= new ArrayList();
+	
+    public void leeLibreria() throws IOException{
+    	String ruta="ficheros/libreria.txt";
+    	String linea="";
+    	FileReader k = new FileReader(ruta);
+    	BufferedReader j = new BufferedReader(k);
+    	
+    	while((linea = j.readLine())!=null) {
+    		String [] info= linea.split(";");
+    		libreria.add(new Libro(info[0], info[1], info[2], info[3]));
+    	}
+    }
     public libserv() {super();}
 
-    protected void procesaSolicitud(HttpServletRequest request, HttpServletResponse response)
+    protected void libreria (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        // Array asociativo de usuarios y claves
-        LinkedHashMap<String, String> credenciales = new LinkedHashMap();
-        credenciales.put ("buenos", "d�as");
-        credenciales.put ("as�", "sea");
-        credenciales.put ("compa�eros", "adi�s");
-        credenciales.put ("felices", "vacaciones");
         
         // Comprobar si la petici�n es mediante Ajax
         Boolean esAjax;
         esAjax="XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With")); // Cabecera X-Requested-With
         if (esAjax) {
             // Comprobar si el usuario es v�lido
-            String usuario=request.getParameter("usuario");
-            String clave="";
-            Boolean usuarioValido=false;
-            for (String key : credenciales.keySet() ) {
-                if (usuario.equals(key)) {
-                        usuarioValido=true;
-                        clave=credenciales.get(key);
-                }
-            }
-            if (usuarioValido==false)
-                System.out.println("Usuario no v�lido");
-            out.println(clave);
+            String isbn=request.getParameter("isbn");
+            out.println("<h1>El isbn es"+isbn+"</h1>");
         }    
         else {
             out.println("Este servlet solo se puede invocar v�a Ajax");
         }    
     }
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		libreria(request, response);
 	}
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		libreria(request, response);
 	}
 
 }

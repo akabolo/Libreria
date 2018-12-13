@@ -11,7 +11,7 @@ body{text-align:center;}
 <script type="text/javascript">
 	
 	function recuperaLibro(){
-		 var ISBN = 'ISBN=' + document.getElementById("recone").value;
+		 var datos = 'isbn=' + document.getElementById("recone").value;
 		 var xmlhttp;  // objeto XMLHttpRequest
 	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
 	            xmlhttp = new XMLHttpRequest();
@@ -22,21 +22,14 @@ body{text-align:center;}
 	        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
 	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 	            var respuesta = xmlhttp.responseText;
-	            respuesta=respuesta.trim();
-	            if (respuesta=='') {  // no se encontró el usuario
-	            document.getElementById("usuarioInexistente").style.visibility = 'visible';
-	            } else {
-	            document.getElementById("usuarioInexistente").style.visibility = 'hidden';
-	            }
-	            document.getElementById("clave").value = respuesta;
-	            document.getElementById("usuario").focus();
+	            document.getElementById("respuestas").innerHTML=respuesta;
+	                 
 	        }
+		    
 		    }
-		    xmlhttp.open("GET","CompruebaUsuario?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+	        xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
 		    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
 		    xmlhttp.send();  // lanza la solicitud
-		    }
-		 
 		 
 	}
 	function recuperaAllLibro(){
@@ -64,5 +57,9 @@ body{text-align:center;}
  		<input type="button" id="enviar" value="Elimina libro" onclick="eliminaLibro();"/>
  		</div>
  	</form>
+ 	<div id="respuestas">
+ 	
+ 	
+ 	</div>
 </body>
 </html>
