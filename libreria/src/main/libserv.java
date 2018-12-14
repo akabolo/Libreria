@@ -18,20 +18,20 @@ import javax.servlet.http.HttpServletResponse;
 public class libserv extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	ArrayList<Libro> libreria= new ArrayList();
+	public libserv() {super();}
+	ArrayList<Libro> listLibros= new ArrayList();
 	
     public void leeLibreria() throws IOException{
-    	String ruta="ficheros/libreria.txt";
+    	String ruta="./ficheros/libreria.txt";
     	String linea="";
-    	FileReader k = new FileReader(ruta);
+    	FileReader k = new FileReader(this.getServletContext().getRealPath("/")+ruta);
     	BufferedReader j = new BufferedReader(k);
     	
     	while((linea = j.readLine())!=null) {
     		String [] info= linea.split(";");
-    		libreria.add(new Libro(info[0], info[1], info[2], info[3]));
+    		listLibros.add(new Libro(info[0], info[1], info[2], info[3]));
     	}
     }
-    public libserv() {super();}
 
     protected void libreria (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,13 +40,72 @@ public class libserv extends HttpServlet {
         PrintWriter out = response.getWriter();
         
         
-        // Comprobar si la petici�n es mediante Ajax
+        // Comprobar si la petición es mediante Ajax
         Boolean esAjax;
         esAjax="XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With")); // Cabecera X-Requested-With
         if (esAjax) {
-            // Comprobar si el usuario es v�lido
-            String isbn=request.getParameter("isbn");
-            out.println("<h1>El isbn es"+isbn+"</h1>");
+        	
+        	String recuperaLibro=request.getParameter("recuperaLibro");
+            String recuperaAllLibro=request.getParameter("recuperaAllLibro");
+            String eliminaLibro=request.getParameter("eliminaLibro");
+            String preModifica=request.getParameter("preModifica");
+            String modificaLibro=request.getParameter("modificaLibro");
+            String preCrea=request.getParameter("preCrea");
+            String creaLibro=request.getParameter("creaLibro");
+            if(listLibros.size()==0) {
+            	leeLibreria();
+            }
+            if(recuperaLibro!=null) {
+            	for (int i = 0; i < listLibros.size(); i++) {
+					if (listLibros.get(i).getIsbn().equals(recuperaLibro)){
+						out.println("<h2>"+listLibros.get(i).getNombre()+"</h2>");
+						out.println("<p>Isbn "+listLibros.get(i).getIsbn()+"</p>");
+						out.println("<p>Autor "+listLibros.get(i).getAutor()+"</p>");
+						out.println("<p>Año publicación "+listLibros.get(i).getAno()+"</p>");
+					}
+				}
+            }
+            else if(recuperaAllLibro!=null) {
+            	for (int i = 0; i < listLibros.size(); i++) {
+						out.println("<h2>"+listLibros.get(i).getNombre()+"</h2>");
+						out.println("<p>Isbn "+listLibros.get(i).getIsbn()+"</p>");
+						out.println("<p>Autor "+listLibros.get(i).getAutor()+"</p>");
+						out.println("<p>Año publicación "+listLibros.get(i).getAno()+"</p></br>");
+				}
+            	
+            }
+            else if(eliminaLibro!=null) {
+            	for (int i = 0; i < listLibros.size(); i++) {
+					if (listLibros.get(i).getIsbn().equals(eliminaLibro)){
+						listLibros.remove(i);
+						out.println("<p>Se ha eliminado el libro "+listLibros.get(i).getNombre()+" de su biblioteca</p>");
+					}
+				}
+            }
+            else if(preModifica!=null) {
+            	for (int i = 0; i < listLibros.size(); i++) {
+					if (listLibros.get(i).getIsbn().equals(preModifica)){
+						out.println("ISBN: <input type='text' name='isbn' id='isbn'/>");
+						out.println("Nombre: <input type='text' name='nombre' id='nombre'/>");
+						out.println("Autor: <input type='text' name='autor' id='autor'/>");
+						out.println("Año: <input type='text' name='ano' id='ano'/>");
+						out.println("<input type='button' id='enviar' value='Modificar libro' onclick='modificaLibro();'>");
+					}
+				}
+            }
+            else if(modificaLibro!=null) {
+            
+						out.println(modificaLibro);
+					
+				
+            }
+            else if(preCrea!=null) {
+            	
+            }
+            else if(creaLibro!=null) {
+	
+            }  
+            
         }    
         else {
             out.println("Este servlet solo se puede invocar v�a Ajax");

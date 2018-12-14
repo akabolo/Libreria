@@ -5,13 +5,15 @@
 <title>Libreria</title>
 <style type="text/css">
 body{text-align:center;}
-.cajas{float:left;height:60%;width:30%;}
-#caja1{margin-left:5%;}
+.cajas{float:left;height:60%;width:30%;margin-left:2%;margin-bottom:4%;}
+
+#respuestas{float:left;text-align:center;}
 </style>
 <script type="text/javascript">
 	
 	function recuperaLibro(){
-		 var datos = 'isbn=' + document.getElementById("recone").value;
+		 var datos = 'recuperaLibro=' + document.getElementById("recone").value;
+		 
 		 var xmlhttp;  // objeto XMLHttpRequest
 	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
 	            xmlhttp = new XMLHttpRequest();
@@ -23,9 +25,7 @@ body{text-align:center;}
 	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 	            var respuesta = xmlhttp.responseText;
 	            document.getElementById("respuestas").innerHTML=respuesta;
-	                 
 	        }
-		    
 		    }
 	        xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
 		    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
@@ -33,10 +33,94 @@ body{text-align:center;}
 		 
 	}
 	function recuperaAllLibro(){
-		
+ 		 var datos = 'recuperaAllLibro=nonull';
+		 
+		 var xmlhttp;  // objeto XMLHttpRequest
+	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+	            xmlhttp = new XMLHttpRequest();
+	        } else {  // para IE6, IE5
+	            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	        }
+	        xmlhttp.onreadystatechange = function() {
+	        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	            var respuesta = xmlhttp.responseText;
+	            document.getElementById("respuestas").innerHTML=respuesta;
+	        }
+		    }
+	        xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+		    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+		    xmlhttp.send();  // lanza la solicitud
 	}
 	function eliminaLibro(){
-	
+		var datos = 'eliminaLibro=' + document.getElementById("elim").value;
+		 
+		 var xmlhttp;  // objeto XMLHttpRequest
+	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+	            xmlhttp = new XMLHttpRequest();
+	        } else {  // para IE6, IE5
+	            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	        }
+	        xmlhttp.onreadystatechange = function() {
+		        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+		        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+		            var respuesta = xmlhttp.responseText;
+		            document.getElementById("respuestas").innerHTML=respuesta;
+		        }
+		    }
+	xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+    xmlhttp.send();  // lanza la solicitud
+	}
+	function preModifica(){
+		 var datos = 'preModifica=' + document.getElementById("mod").value;
+		 document.getElementById("seva").style.display="none";
+		 var xmlhttp;  // objeto XMLHttpRequest
+	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+	            xmlhttp = new XMLHttpRequest();
+	        } else {  // para IE6, IE5
+	            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	        }
+	        xmlhttp.onreadystatechange = function() {
+	        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	            var respuesta = xmlhttp.responseText;
+	            document.getElementById("respuestas").innerHTML=respuesta;
+	        }
+		    }
+	        xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+		    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+		    xmlhttp.send();  // lanza la solicitud
+	}
+	function modificaLibro(){
+		 var datos = 'modificaLibro=' + document.getElementById("isbn").value +
+		 + document.getElementById("nombre").value +
+		 + document.getElementById("autor").value +
+		 + document.getElementById("ano").value;
+		 
+		 document.getElementById("seva").style.display="inline-block";
+		 var xmlhttp;  // objeto XMLHttpRequest
+	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+	            xmlhttp = new XMLHttpRequest();
+	        } else {  // para IE6, IE5
+	            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	        }
+	        xmlhttp.onreadystatechange = function() {
+	        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	            var respuesta = xmlhttp.responseText;
+	            document.getElementById("respuestas").innerHTML=respuesta;
+	        }
+		    }
+	        xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+		    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+		    xmlhttp.send();  // lanza la solicitud
+	}
+	function preCrea(){
+		
+	}
+	function creaLibro(){
+		
 	}
 
 </script>
@@ -44,6 +128,7 @@ body{text-align:center;}
 <body>
 	</br></br><h1>LIBRERIA</h1></br></br></br></br>
 	<form>
+	<div id="seva">
 		<div class="cajas" id="caja1">
  		Recuperar un libro por ISBN</br><input type="text" name="recone" id="recone"/></br>
  		<input type="button" id="enviar" value="Recuperar libro" onclick="recuperaLibro();"/>
@@ -54,12 +139,20 @@ body{text-align:center;}
  		</div>
  		<div class="cajas">
  		Eliminar un libro por ISBN</br><input type="text" name="elim" id="elim"/></br>
- 		<input type="button" id="enviar" value="Elimina libro" onclick="eliminaLibro();"/>
+ 		<input type="button" id="enviar" value="Eliminar libro" onclick="eliminaLibro();"/>
  		</div>
+ 		<div class="cajas">
+ 		Modificar un libro por ISBN</br>
+ 		ISBN:<input type="text" name="mod" id="mod"/></br>
+ 		<input type="button" id="enviar" value="Ir a modificar" onclick="preModifica();"/>
+ 		</div>
+ 		<div class="cajas">
+ 		Crear un nuevo libro</br>
+ 		<input type="button" id="enviar" value="Ir a crear" onclick="preCrea();"/>
+ 		</div>
+ 	</div>	
  	</form>
- 	<div id="respuestas">
  	
- 	
- 	</div>
+ 	<div id="respuestas"></div>
 </body>
 </html>
