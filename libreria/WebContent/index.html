@@ -68,9 +68,9 @@ body{text-align:center;}
 		            document.getElementById("respuestas").innerHTML=respuesta;
 		        }
 		    }
-	xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
-    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
-    xmlhttp.send();  // lanza la solicitud
+			xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+		    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+		    xmlhttp.send();  // lanza la solicitud
 	}
 	function preModifica(){
 		 var datos = 'preModifica=' + document.getElementById("mod").value;
@@ -82,23 +82,25 @@ body{text-align:center;}
 	            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	        }
 	        xmlhttp.onreadystatechange = function() {
-	        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
-	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-	            var respuesta = xmlhttp.responseText;
-	            document.getElementById("respuestas").innerHTML=respuesta;
-	        }
+	        	// si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+		        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+		            var respuesta = xmlhttp.responseText;
+		            document.getElementById("respuestas").innerHTML=respuesta;
+		        }
 		    }
 	        xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
 		    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
 		    xmlhttp.send();  // lanza la solicitud
 	}
 	function modificaLibro(){
-		 var datos = 'modificaLibro=' + document.getElementById("isbn").value +
-		 + document.getElementById("nombre").value +
-		 + document.getElementById("autor").value +
-		 + document.getElementById("ano").value;
+		 var separador=";";
+		 var datos = 'isbn=' + document.getElementById("isbn").value 
+		 + '& nombre='document.getElementById("nombre").value
+		 + '& autor='document.getElementById("autor").value
+		 + '& ano='document.getElementById("ano").value;
 		 
 		 document.getElementById("seva").style.display="inline-block";
+		 
 		 var xmlhttp;  // objeto XMLHttpRequest
 	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
 	            xmlhttp = new XMLHttpRequest();
@@ -106,11 +108,11 @@ body{text-align:center;}
 	            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	        }
 	        xmlhttp.onreadystatechange = function() {
-	        // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
-	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-	            var respuesta = xmlhttp.responseText;
-	            document.getElementById("respuestas").innerHTML=respuesta;
-	        }
+	       	 // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+		        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+		            var respuesta = xmlhttp.responseText;
+		            document.getElementById("respuestas").innerHTML=respuesta;
+		        }
 		    }
 	        xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
 		    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria

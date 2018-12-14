@@ -52,6 +52,12 @@ public class libserv extends HttpServlet {
             String modificaLibro=request.getParameter("modificaLibro");
             String preCrea=request.getParameter("preCrea");
             String creaLibro=request.getParameter("creaLibro");
+            String isbn=request.getParameter("isbn");
+            String nombre=request.getParameter("nombre");
+            String autor=request.getParameter("autor");
+            String ano=request.getParameter("ano");
+            
+            
             if(listLibros.size()==0) {
             	leeLibreria();
             }
@@ -95,7 +101,10 @@ public class libserv extends HttpServlet {
             }
             else if(modificaLibro!=null) {
             
-						out.println(modificaLibro);
+						out.println(isbn);
+						out.println(nombre);
+						out.println(autor);
+						out.println(ano);
 					
 				
             }
