@@ -53,23 +53,28 @@ public class libserv extends HttpServlet {
             String preCrea=request.getParameter("preCrea");
             String creaLibro=request.getParameter("creaLibro");
             String isbn=request.getParameter("isbn");
+            String isbn2=request.getParameter("isbn2");
             String nombre=request.getParameter("nombre");
             String autor=request.getParameter("autor");
             String ano=request.getParameter("ano");
+            String isbnAntiguo=request.getParameter("isbnAntiguo");
             
             
             if(listLibros.size()==0) {
             	leeLibreria();
             }
             if(recuperaLibro!=null) {
+            	int cont=0;
             	for (int i = 0; i < listLibros.size(); i++) {
 					if (listLibros.get(i).getIsbn().equals(recuperaLibro)){
-						out.println("<h2>"+listLibros.get(i).getNombre()+"</h2>");
+						out.println("</br></br></br></br></br><h2>"+listLibros.get(i).getNombre()+"</h2>");
 						out.println("<p>Isbn "+listLibros.get(i).getIsbn()+"</p>");
 						out.println("<p>Autor "+listLibros.get(i).getAutor()+"</p>");
 						out.println("<p>Año publicación "+listLibros.get(i).getAno()+"</p>");
+						cont++;
 					}
 				}
+            	if(cont==0) {out.println("</br></br></br></br></br></br></br></br></br></br>El ISBN introducido es erroneo");}
             }
             else if(recuperaAllLibro!=null) {
             	for (int i = 0; i < listLibros.size(); i++) {
@@ -81,43 +86,78 @@ public class libserv extends HttpServlet {
             	
             }
             else if(eliminaLibro!=null) {
+            	int cont=0;
             	for (int i = 0; i < listLibros.size(); i++) {
 					if (listLibros.get(i).getIsbn().equals(eliminaLibro)){
 						listLibros.remove(i);
-						out.println("<p>Se ha eliminado el libro "+listLibros.get(i).getNombre()+" de su biblioteca</p>");
-					}
+						out.println("</br></br></br></br></br></br></br></br><p>Se ha eliminado el libro '"+listLibros.get(i).getNombre()+"' de su biblioteca</p>");
+						cont++;
+					}				
 				}
+            	if(cont==0) {out.println("</br></br></br></br></br></br></br></br></br></br>El ISBN introducido es erroneo");}	
             }
             else if(preModifica!=null) {
+            	int cont=0;
             	for (int i = 0; i < listLibros.size(); i++) {
 					if (listLibros.get(i).getIsbn().equals(preModifica)){
-						out.println("ISBN: <input type='text' name='isbn' id='isbn'/>");
-						out.println("Nombre: <input type='text' name='nombre' id='nombre'/>");
-						out.println("Autor: <input type='text' name='autor' id='autor'/>");
-						out.println("Año: <input type='text' name='ano' id='ano'/>");
+						out.println("<div id='aka'>");
+						out.println("</br></br>Datos a modificar:</br></br></br>");
+						out.println("ISBN: <input type='text' name='isbn' id='isbn'/></br></br>");
+						out.println("Nombre: <input type='text' name='nombre' id='nombre'/></br></br>");
+						out.println("Autor: <input type='text' name='autor' id='autor'/></br></br>");
+						out.println("Año: <input type='text' name='ano' id='ano'/></br></br></br>");
 						out.println("<input type='button' id='enviar' value='Modificar libro' onclick='modificaLibro();'>");
+						out.println("<input type='hidden' id='isbnAntiguo' value='"+preModifica+"'/>");
+						out.println("</div>");
+						cont++;
+					}					
+				}
+            	if (cont==0) {out.println("</br></br></br></br></br></br></br></br></br></br>El ISBN introducido es erroneo");}
+            }
+            else if(isbnAntiguo!=null) {
+            	if (isbn!=null || isbn!="") {
+            	for (int i = 0; i < listLibros.size(); i++) {
+            		if (listLibros.get(i).getIsbn().equals(isbnAntiguo)){
+						listLibros.get(i).setIsbn(isbn);
+						listLibros.get(i).setNombre(nombre);
+						listLibros.get(i).setAutor(autor);
+						listLibros.get(i).setAno(ano);
+						out.println("</br></br>El libro con ISBN: "+isbnAntiguo+" ha sido editado</br>");
+						out.println("Los nuevos datos son:</br></br>");
+						out.println("<h2>Nombre: "+listLibros.get(i).getNombre()+"</h2></br>");
+						out.println("<p>ISBN: "+listLibros.get(i).getIsbn()+"</p></br>");
+						out.println("<p>Autor: "+listLibros.get(i).getAutor()+"</p></br>");
+						out.println("<p>Año: "+listLibros.get(i).getAno()+"</p>");
 					}
 				}
-            }
-            else if(modificaLibro!=null) {
-            
-						out.println(isbn);
-						out.println(nombre);
-						out.println(autor);
-						out.println(ano);
-					
+            	}else {out.println("</br></br></br></br></br></br></br></br></br></br>El ISBN introducido es erroneo");}
+			}
+            else if(preCrea!=null) {
+            	out.println("<div id='aka'>");
+            	out.println("</br></br>Datos del libro a crear:</br></br></br>");
+				out.println("ISBN: <input type='text' name='isbn' id='isbn'/></br></br>");
+				out.println("Nombre: <input type='text' name='nombre' id='nombre'/></br></br>");
+				out.println("Autor: <input type='text' name='autor' id='autor'/></br></br>");
+				out.println("Año: <input type='text' name='ano' id='ano'/></br></br></br>");
+				out.println("<input type='button' id='enviar' value='Crear Libro' onclick='creaLibro();'>");
+				out.println("</div>");
 				
             }
-            else if(preCrea!=null) {
-            	
-            }
-            else if(creaLibro!=null) {
-	
+            else if(isbn2!=null) {
+            	if(isbn2!=null || isbn2!="") {
+            	listLibros.add(new Libro(isbn2,nombre,autor,ano));
+            	out.println("</br></br>El nuevo libro ha sido añadido</br>");
+				out.println("Los datos del nuevo libro son:</br></br>");
+				out.println("<h2>Nombre: "+nombre+"</h2></br>");
+				out.println("<p>ISBN: "+isbn2+"</p></br>");
+				out.println("<p>Autor: "+autor+"</p></br>");
+				out.println("<p>Año: "+ano+"</p>");
+            	}else {out.println("El ISBN introducido es incorrecto");}
             }  
             
         }    
         else {
-            out.println("Este servlet solo se puede invocar v�a Ajax");
+            out.println("Este servlet solo se puede invocar via Ajax");
         }    
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		

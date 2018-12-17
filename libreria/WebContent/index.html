@@ -3,12 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Libreria</title>
-<style type="text/css">
-body{text-align:center;}
-.cajas{float:left;height:60%;width:30%;margin-left:2%;margin-bottom:4%;}
-
-#respuestas{float:left;text-align:center;}
-</style>
 <script type="text/javascript">
 	
 	function recuperaLibro(){
@@ -74,7 +68,7 @@ body{text-align:center;}
 	}
 	function preModifica(){
 		 var datos = 'preModifica=' + document.getElementById("mod").value;
-		 document.getElementById("seva").style.display="none";
+		 
 		 var xmlhttp;  // objeto XMLHttpRequest
 	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
 	            xmlhttp = new XMLHttpRequest();
@@ -93,14 +87,12 @@ body{text-align:center;}
 		    xmlhttp.send();  // lanza la solicitud
 	}
 	function modificaLibro(){
-		 var separador=";";
-		 var datos = 'isbn=' + document.getElementById("isbn").value 
-		 + '& nombre='document.getElementById("nombre").value
-		 + '& autor='document.getElementById("autor").value
-		 + '& ano='document.getElementById("ano").value;
-		 
-		 document.getElementById("seva").style.display="inline-block";
-		 
+		var datos = 'isbn=' + document.getElementById("isbn").value 
+		 + '&nombre=' + document.getElementById("nombre").value
+		 + '&autor=' + document.getElementById("autor").value
+		 + '&ano=' + document.getElementById("ano").value
+		 + '&isbnAntiguo=' + document.getElementById("isbnAntiguo").value;
+		 		 
 		 var xmlhttp;  // objeto XMLHttpRequest
 	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
 	            xmlhttp = new XMLHttpRequest();
@@ -119,39 +111,117 @@ body{text-align:center;}
 		    xmlhttp.send();  // lanza la solicitud
 	}
 	function preCrea(){
-		
+		 var datos = 'preCrea=nonull';
+		 		 
+		 var xmlhttp;  // objeto XMLHttpRequest
+	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+	            xmlhttp = new XMLHttpRequest();
+	        } else {  // para IE6, IE5
+	            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	        }
+	        xmlhttp.onreadystatechange = function() {
+	        	// si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+		        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+		            var respuesta = xmlhttp.responseText;
+		            document.getElementById("respuestas").innerHTML=respuesta;
+		        }
+		    }
+	        xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+		    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+		    xmlhttp.send();  // lanza la solicitud
 	}
 	function creaLibro(){
-		
+		 var datos = 'isbn2=' + document.getElementById("isbn").value 
+		 + '&nombre=' + document.getElementById("nombre").value
+		 + '&autor=' + document.getElementById("autor").value
+		 + '&ano=' + document.getElementById("ano").value;
+		 
+		 var xmlhttp;  // objeto XMLHttpRequest
+	        if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+	            xmlhttp = new XMLHttpRequest();
+	        } else {  // para IE6, IE5
+	            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	        }
+	        xmlhttp.onreadystatechange = function() {
+	        	// si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+		        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+		            var respuesta = xmlhttp.responseText;
+		            document.getElementById("respuestas").innerHTML=respuesta;
+		        }
+		    }
+	        xmlhttp.open("GET","libserv?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+		    xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+		    xmlhttp.send();  // lanza la solicitud
 	}
 
 </script>
+<style type="text/css">
+	body{font-family:sans-serif;color: #093052;background-color: #cae6ff ;}
+	#titulo{text-align:center;color: #093052;}
+	.cajas{float:left;display:inline-block;height:19%;width:67%;padding-left:2%;}
+	#respuestas{float:left;width:46%;height:440px;margin-right:3%;text-align:center;overflow: auto;border: 0.5px #093052 solid;}
+	#seva{float:left;width:46%;height:440px;margin-left:3%; border: 0.5px #093052 solid;border-radius: 30px 0px 0px 30px;}
+	#aka{padding-left:5%;}
+	#botonera{
+	float: right;
+	width:30%;
+	height:100%;
+	}
+	#lista{
+	height:72%;
+	}
+	#lista li{
+	padding-left: 18%;
+    padding-top: 12%;
+    list-style: none;
+    background-color: #cae6ff;
+    color: #093052;
+    font-size: 15px;
+    width: 100%;
+    height: 20%;
+	}
+	#lista li:hover{
+	background-color: #DCBB81;
+	}
+</style>
 </head>
 <body>
-	</br></br><h1>LIBRERIA</h1></br></br></br></br>
+	<h3 id="titulo">EDU'S LIBRARY</h3>
 	<form>
 	<div id="seva">
+		<div id="botonera">
+		<ul id="lista"> 
+			<li onclick="recuperaLibro();"><p>Recuperar libro</p></li>
+			<li onclick="recuperaAllLibro();"><p>Recuperar libros</p></li>
+			<li onclick="eliminaLibro();"><p>Eliminar libro</p></li>
+			<li onclick="preModifica();"><p>Modificar libros</p></li>
+			<li onclick="preCrea();"><p>Crear libro</p></li>
+		</ul>
+		</div>
+		</br>
 		<div class="cajas" id="caja1">
- 		Recuperar un libro por ISBN</br><input type="text" name="recone" id="recone"/></br>
+ 		Recuperar un libro por ISBN</br><input type="text" name="recone" id="recone"/>
  		<input type="button" id="enviar" value="Recuperar libro" onclick="recuperaLibro();"/>
- 		</div>
- 		<div class="cajas">
- 		Recuperar todos los libros</br>
+ 		</div></br></br></br></br></br>
+ 		<div class="cajas" id="caja2">
+ 		Recuperar todos los libros
  		<input type="button" id="enviar" value="Recuperar libros" onclick="recuperaAllLibro();"/>
- 		</div>
- 		<div class="cajas">
- 		Eliminar un libro por ISBN</br><input type="text" name="elim" id="elim"/></br>
+ 		</div></br></br></br></br>
+ 		<div class="cajas" id="caja3">
+ 		Eliminar un libro por ISBN</br><input type="text" name="elim" id="elim"/>
  		<input type="button" id="enviar" value="Eliminar libro" onclick="eliminaLibro();"/>
- 		</div>
- 		<div class="cajas">
+ 		</div></br></br></br></br></br>
+ 		<div class="cajas" id="caja4">
  		Modificar un libro por ISBN</br>
- 		ISBN:<input type="text" name="mod" id="mod"/></br>
+ 		ISBN:<input type="text" name="mod" id="mod"/>
  		<input type="button" id="enviar" value="Ir a modificar" onclick="preModifica();"/>
- 		</div>
- 		<div class="cajas">
- 		Crear un nuevo libro</br>
+ 		</div></br></br></br></br></br>
+ 		<div class="cajas" id="caja5">
+ 		Crear un nuevo libro
  		<input type="button" id="enviar" value="Ir a crear" onclick="preCrea();"/>
  		</div>
+ 		
+ 		
  	</div>	
  	</form>
  	
